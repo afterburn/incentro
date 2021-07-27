@@ -7,11 +7,11 @@ import Input from '../components/Input'
 import Button from '../components/Button'
 import Carousel from '../components/Carousel'
 import List from '../components/List'
+import Spinner from '../components/Spinner'
 
 import { SpotifyContext } from '../context/Spotify'
 
 import TTS from '../utils/tts'
-import { get } from '../utils/fetch'
 
 const Home = styled(({ className }) => {
   const spotifyContext = React.useContext(SpotifyContext)
@@ -50,7 +50,12 @@ const Home = styled(({ className }) => {
         <FaMicrophone />
       </Button>
     </div>
-    {spotifyContext.searchResult &&
+    {spotifyContext.isSearching &&
+      <div className='content no-results'>
+        <Spinner />    
+      </div>
+    }
+    {!spotifyContext.isSearching && spotifyContext.searchResult &&
       <div className='content'>
         <Carousel
           title='Albums'
@@ -66,7 +71,7 @@ const Home = styled(({ className }) => {
         />
       </div>
     }
-    {!spotifyContext.searchResult &&
+    {!spotifyContext.isSearching && !spotifyContext.searchResult &&
       <div className='content no-results'>
         <p>No result(s) found.</p>
       </div>
@@ -79,7 +84,7 @@ const Home = styled(({ className }) => {
 
   .toolbar {
     display: flex;
-    padding: 20px;
+    padding: 8px;
 
     button {
       margin-left: 8px;

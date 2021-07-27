@@ -37,7 +37,9 @@ const ListItem = styled(({ className, data }) => {
     <div className='content'>
       <div className='album-cover' />
       <div className='info'>
-        <span>{name}</span>
+        <Link to={`/${data.type}/${data.id}`}>
+          <span>{name}</span>
+        </Link>
         <div className='artists'>
         {data.artists.map((artist, i) => {
           return <Link to={`/${artist.type}/${artist.id}`} key={i}>{artist.name}</Link>
@@ -59,17 +61,37 @@ const ListItem = styled(({ className, data }) => {
   padding: 8px;
   cursor: pointer;
 
+  a:hover {
+    text-decoration: underline;
+  }
+
   .content {
     display: flex;
     align-items: center;
 
-    > div:not(.album-cover) {
+    > div {
       margin-right: 8px;
-      width: calc((100% / 4) - 8px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
       &:last-of-type {
         display: flex;
         justify-content: flex-end;
+      }
+
+      &:nth-of-type(1) {}
+      &:nth-of-type(2) {
+        width: calc((100% / 12 * 4) - 8px);
+      }
+      &:nth-of-type(3) {
+        width: calc((100% / 12 * 4) - 8px);
+      }
+      &:nth-of-type(4) {
+        width: calc((100% / 12 * 2) - 8px);
+      }
+      &:nth-of-type(5) {
+        width: calc((100% / 12 * 2) - 8px);
       }
     }
 
@@ -92,7 +114,6 @@ const ListItem = styled(({ className, data }) => {
       background-repeat: no-repeat;
       background-position: center;
       border-radius: var(--borderRadius);
-      margin-right: 8px;
     }
   }
 

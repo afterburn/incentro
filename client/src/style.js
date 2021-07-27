@@ -3,9 +3,10 @@ import { createGlobalStyle } from 'styled-components'
 export default createGlobalStyle`
   :root {
     --borderRadius: 4px;
-
     --warn: #F44336;
     --warnHover: #D32F2F;
+    --cta: #8BC34A;
+    --ctaHover: #689F38;
   }
 
   * {
@@ -19,5 +20,9 @@ export default createGlobalStyle`
 
   html, body {
     background-color: #222;
+  }
+
+  a {
+    text-decoration: none;
   }
 `

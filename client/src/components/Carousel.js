@@ -5,6 +5,19 @@ import { useHistory } from 'react-router-dom'
 import inverseClamp from '../utils/inverse-clamp'
 import getImageUrl from '../utils/get-image-url'
 
+const getXY = (e) => {
+  if (e.touches && e.touches.length > 0) {
+    return {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY
+    }
+  }
+  return {
+    x: e.clientX,
+    y: e.clientY
+  }
+}
+
 const Carousel = styled(({ className, title, type, data }) => {
   const listRef = React.useRef()
   const itemsRef = React.useRef()
@@ -33,24 +46,19 @@ const Carousel = styled(({ className, title, type, data }) => {
   }
 
   const handleDragStart = (e) => {
-    e.preventDefault()
-    dragState.lmbPressed = true
-    dragState.start = {
-      x: e.clientX || e.touches[0].clientX,
-      y: e.clientY || e.touches[0].clientY
+    if (!e.touches) {
+      e.preventDefault()
     }
-    
+    dragState.lmbPressed = true
+    dragState.start = getXY(e)
+
     const items = itemsRef.current
     items.dataset.isDragged = true
   }
 
   const handleDrag = e => {
     if (dragState.lmbPressed) {
-      const mouse = {
-        x: e.clientX || e.touches[0].clientX,
-        y: e.clientY || e.touches[0].clientY
-      }
-    
+      const mouse = getXY(e)    
       const totalWidth = data.length * (200 + 16)
       if (totalWidth < window.innerWidth) {
         return
@@ -93,7 +101,7 @@ const Carousel = styled(({ className, title, type, data }) => {
 
       return () => {
         list.removeEventListener('wheel', handleScroll)
-        list.removeEventListener('dragend', handleDragStart)
+        list.removeEventListener('dragstart', handleDragStart)
         list.removeEventListener('touchstart', handleDragStart)
         window.removeEventListener('mouseup', handleDragEnd)
         window.removeEventListener('touchend', handleDragEnd)
@@ -113,7 +121,9 @@ const Carousel = styled(({ className, title, type, data }) => {
         />
       )}
       {data.length === 0 &&
-        <p>No result(s).</p>
+        <div className='no-results'>
+          <p>No results.</p>
+        </div>
       }
     </div>
   </div>
@@ -132,6 +142,17 @@ const Carousel = styled(({ className, title, type, data }) => {
     width: 100%;
     will-change: transform;
     transform: translate3d(0px, 0px, 0px);
+
+    .no-results {
+      width: calc(100% - 16px);
+      margin: 0 8px;
+      height: 200px;
+      background-color: rgba(0, 0, 0, .1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-redius: var(--borderRadius);
+    }
   }
 `
 

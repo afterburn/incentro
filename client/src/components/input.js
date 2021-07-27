@@ -16,6 +16,7 @@ const Input = styled((props) => {
     {...omit(props, ['forwardRef'])}
     ref={props.forwardRef}
     onChange={dHandleChange}
+    data-testid='input'
   />
 })`
   background-color: rgba(255, 255, 255, .1);
