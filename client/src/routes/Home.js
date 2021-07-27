@@ -20,6 +20,7 @@ const Home = styled(({ className }) => {
 
   const handleSearch = query => {
     spotifyContext.search(query)
+    spotifyContext.setQuery(query)
   }
 
   const handleTTS = async () => {
@@ -44,6 +45,7 @@ const Home = styled(({ className }) => {
         forwardRef={inputRef}
         onChange={handleSearch}
         placeholder='Search for albums, artists or tracks...'
+        defaultValue={spotifyContext.query}
         debounce={250}
       />
       <Button onClick={handleTTS} color='warn' disabled={isRecording}>

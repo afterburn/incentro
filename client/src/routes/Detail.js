@@ -38,6 +38,8 @@ const Detail = styled(({ className }) => {
     ? getImageUrl(data.images)
     : getImageUrl(data.album.images)
     
+  console.log(data)
+  
   return <div className={className}>
     <div className='cover'>
       <div className='cover-background' />

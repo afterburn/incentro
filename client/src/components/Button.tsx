@@ -45,6 +45,14 @@ const Button: React.FC = styled((props: IProps) => {
       color .2s ease-in;
   }
 
+  &:disabled {
+    background-color: #ccc;
+
+    &:hover {
+      background-color: #ccc;
+    }
+  }
+
   ${props => props.variant === 'outlined' && css<IProps>`
     background-color: transparent;
     border: 1px solid ${(props) => colors[props.color]};

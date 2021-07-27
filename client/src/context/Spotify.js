@@ -10,6 +10,7 @@ export const Provider = ({ children }) => {
   const [artists, setArtists] = React.useState({})
   const [tracks, setTracks] = React.useState({})
   const [queries, setQueries] = React.useState({})
+  const [query, setQuery] = React.useState('')
   const [searchResult, setSearchResult] = React.useState(null)
   const [isSearching, setIsSearching] = React.useState(false)
 
@@ -76,7 +77,9 @@ export const Provider = ({ children }) => {
     getResult,
     searchResult,
     search,
-    isSearching
+    isSearching,
+    query,
+    setQuery
   }
 
   return <SpotifyContext.Provider value={context}>
