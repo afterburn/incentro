@@ -3,8 +3,14 @@ import styled from 'styled-components'
 import debounce from 'lodash/debounce'
 import omit from 'omit.js'
 
-const Input = styled((props) => {
-  const handleChange = e => {
+interface IProps {
+  onChange: (value: string) => void,
+  debounce: number,
+  forwardRef: any
+}
+
+const Input = styled((props: IProps) => {
+  const handleChange = (e: any) => {
     props.onChange(e.target.value)
   }
   

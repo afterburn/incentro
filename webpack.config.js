@@ -15,6 +15,13 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        use: [
+          { loader: 'ts-loader' }
+        ],
+      },
+      {
         test: /\.js$/,
         exclude: /node_modules/,
         use: [
@@ -32,5 +39,8 @@ module.exports = {
         { from: path.join(src, 'assets'), to: dist }
       ]
     })
-  ]
+  ],
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.json']
+  }
 }

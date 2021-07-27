@@ -1,17 +1,27 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 
-const colors = {
+interface IProps {
+  children: React.ReactNode,
+  color: string,
+  variant: string
+}
+
+type ColorOptions  = {
+  [key: string]: string
+}
+
+const colors: ColorOptions = {
   'warn': 'var(--warn)',
   'cta': 'var(--cta)'
 }
 
-const hoverColors = {
+const hoverColors: ColorOptions = {
   'warn': 'var(--warnHover)',
   'cta': 'var(--ctaHover)'
 }
 
-const Button = styled((props) => {
+const Button: React.FC = styled((props: IProps) => {
   return <button {...props} data-testid='button'>
     {props.children}
   </button>
@@ -23,25 +33,25 @@ const Button = styled((props) => {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: ${({ color }) => colors[color]};
+  background-color: ${(props) => colors[props.color]};
   transition: background-color .2s ease-out,
     color .2s ease-out;
   padding: 8px;
   border: 1px solid transparent;
 
   &:hover {
-    background-color: ${({ color }) => hoverColors[color]};
+    background-color: ${(props) => hoverColors[props.color]};
     transition: background-color .2s ease-in,
       color .2s ease-in;
   }
 
-  ${props => props.variant === 'outlined' && css`
+  ${props => props.variant === 'outlined' && css<IProps>`
     background-color: transparent;
-    border: 1px solid ${({ color }) => colors[color]};
-    color: ${({ color }) => colors[color]};
+    border: 1px solid ${(props) => colors[props.color]};
+    color: ${(props) => colors[props.color]};
 
     &:hover {
-      background-color: ${({ color }) => colors[color]};
+      background-color: ${(props) => colors[props.color]};
       color: white;
     }
   `}
