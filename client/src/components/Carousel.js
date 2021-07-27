@@ -101,7 +101,7 @@ const Carousel = styled(({ className, title, type, data }) => {
 
       list.addEventListener('wheel', handleScroll)
       list.addEventListener('dragstart', handleDragStart)
-      list.addEventListener('touchstart', handleDragStart)
+      list.addEventListener('touchstart', handleDragStart, { passive: true })
       window.addEventListener('mouseup', handleDragEnd)
       window.addEventListener('touchend', handleDragEnd)
       window.addEventListener('mousemove', handleDrag)

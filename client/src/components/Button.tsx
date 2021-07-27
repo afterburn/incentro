@@ -2,9 +2,9 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 
 interface IProps {
-  children: React.ReactNode,
-  color: string,
-  variant: string
+  children?: React.ReactNode,
+  color?: string,
+  variant?: string
 }
 
 type ColorOptions  = {

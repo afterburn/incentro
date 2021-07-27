@@ -5,8 +5,8 @@ import omit from 'omit.js'
 
 interface IProps {
   onChange: (value: string) => void,
-  debounce: number,
-  forwardRef: any
+  debounce?: number,
+  forwardRef?: any
 }
 
 const Input = styled((props: IProps) => {
