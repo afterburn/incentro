@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import debounce from 'lodash/debounce'
+import omit from 'omit.js'
 
 const Input = styled((props) => {
   const handleChange = e => {
@@ -12,7 +13,8 @@ const Input = styled((props) => {
     : handleChange
 
   return <input
-    {...props}
+    {...omit(props, ['forwardRef'])}
+    ref={props.forwardRef}
     onChange={dHandleChange}
   />
 })`

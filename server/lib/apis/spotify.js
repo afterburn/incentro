@@ -30,3 +30,15 @@ module.exports.search = (query, token) => {
       .catch(reject)
   })
 }
+
+module.exports.searchByType = (dataType, id, token) => {
+  return new Promise((resolve, reject) => {
+    get(`https://api.spotify.com/v1/${dataType}s/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then(resolve)
+      .catch(reject)
+  })
+}

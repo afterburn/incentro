@@ -1,45 +1,28 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
-import Input from './components/input'
-import List from './components/list'
+import { Provider as SpotifyProvider } from './context/Spotify'
 
-import { get } from './utils/fetch'
+import Fallback from './components/Fallback'
+
+import GlobalStyle from './style'
+
+const HomeRoute = React.lazy(() => import('./routes/Home'))
+const DetailRoute = React.lazy(() => import('./routes/Detail'))
 
 const App = () => {
-  const [searchResult, setSearchResult] = React.useState(null)
-
-  const handleSearch = val => {
-    get(`/api/search/${val}`)
-      .then(setSearchResult)
-      .catch(err => console.log(err))
-  }
-
-  return <>
-    <Input
-      onChange={handleSearch}
-      debounce={250}
-    />
-    {searchResult &&
-      <>
-        <List
-          title='Albums'
-          data={searchResult.albums}
-        />
-        <List
-          title='Artists'
-          data={searchResult.artists}
-        />
-        <List
-          title='Tracks'
-          data={searchResult.tracks}
-        />
-      </>
-    }
-    {!searchResult &&
-      <p>Use the search field or text-to-speech button to search for albums, artists or tracks</p>
-    }
-  </>
+  return <SpotifyProvider>
+    <GlobalStyle />
+    <Router>
+      <Suspense fallback={<Fallback />}>
+        <Switch>
+          <Route exact path='/' component={HomeRoute} />
+          <Route path='/:dataType/:id' component={DetailRoute} />
+        </Switch>
+      </Suspense>
+    </Router>
+  </SpotifyProvider>
 }
 
 ReactDOM.render(
