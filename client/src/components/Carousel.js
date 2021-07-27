@@ -58,18 +58,20 @@ const Carousel = styled(({ className, title, type, data }) => {
 
   const handleDrag = e => {
     if (dragState.lmbPressed) {
-      const mouse = getXY(e)    
-      const totalWidth = data.length * (200 + 16)
+      const mouse = getXY(e)
+      const items = itemsRef.current
+      const firstChild = items.children[0]
+      const firstChildRect = firstChild.getBoundingClientRect()
+
+      const totalWidth = data.length * (firstChildRect.width + 16)
       if (totalWidth < window.innerWidth) {
         return
       }
 
       const min = 0
       const max = -totalWidth + window.innerWidth - 16
-
       const deltaX = dragState.start.x - mouse.x
 
-      const items = itemsRef.current
       const currentOffset = Number(items.dataset.offset) || 0
       const newOffset = items.dataset.tmpOffset = inverseClamp(currentOffset - deltaX, min, max)
       items.style.transform = `translate3d(${newOffset}px, 0px, 0px)`
@@ -87,6 +89,12 @@ const Carousel = styled(({ className, title, type, data }) => {
     }
   }
 
+  const handleResize = () => {
+    const items = itemsRef.current
+    items.dataset.offset = 0
+    items.style.transform = `translate3d(0px, 0px, 0px)`
+  }
+
   React.useEffect(() => {
     if (itemsRef.current && listRef.current) {
       const list = listRef.current
@@ -98,6 +106,7 @@ const Carousel = styled(({ className, title, type, data }) => {
       window.addEventListener('touchend', handleDragEnd)
       window.addEventListener('mousemove', handleDrag)
       window.addEventListener('touchmove', handleDrag)
+      window.addEventListener('resize', handleResize)
 
       return () => {
         list.removeEventListener('wheel', handleScroll)
@@ -107,6 +116,7 @@ const Carousel = styled(({ className, title, type, data }) => {
         window.removeEventListener('touchend', handleDragEnd)
         window.removeEventListener('mousemove', handleDrag)
         window.removeEventListener('touchmove', handleDrag)
+        window.removeEventListener('resize', handleResize)
       }
     }
   }, [itemsRef.current, listRef.current])
@@ -175,8 +185,14 @@ const CarouselItem = styled(({ className, data }) => {
     </div>
   </div>
 })`
-  width: 200px;
-  height: 200px;
+  width: var(--carouselItemSize);
+  height: var(--carouselItemSize);
+
+  @media only screen and (min-width: 768px) {
+    width: calc(var(--carouselItemSize) * 2);
+    height: calc(var(--carouselItemSize) * 2);
+  }
+
   display: inline-block;
   margin: 8px;
   border-radius: 4px;

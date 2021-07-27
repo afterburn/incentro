@@ -46,13 +46,13 @@ const ListItem = styled(({ className, data }) => {
         })}
         </div>
       </div>
-      <div>
+      <div className='album'>
         <Link to={`/${album.type}/${album.id}`}>{album.name}</Link>
       </div>
-      <div>
+      <div className='release-date'>
         {album.release_date}
       </div>
-      <div>
+      <div className='popularity'>
         {popularity} / 100
       </div>
     </div>
@@ -69,29 +69,55 @@ const ListItem = styled(({ className, data }) => {
     display: flex;
     align-items: center;
 
+    .release-date,
+    .popularity {
+      display: none;
+    }
+
+    @media only screen and (min-width: 768px) {
+      .release-date,
+      .popularity {
+        display: inline-block;
+      }
+    }
+
     > div {
       margin-right: 8px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
 
-      &:last-of-type {
+      &:nth-of-type(2),
+      &:nth-of-type(3) {
+        width: 50%;
+      }
+
+      &:nth-of-type(3) {
         display: flex;
         justify-content: flex-end;
       }
 
-      &:nth-of-type(1) {}
-      &:nth-of-type(2) {
-        width: calc((100% / 12 * 4) - 8px);
-      }
-      &:nth-of-type(3) {
-        width: calc((100% / 12 * 4) - 8px);
-      }
-      &:nth-of-type(4) {
-        width: calc((100% / 12 * 2) - 8px);
-      }
-      &:nth-of-type(5) {
-        width: calc((100% / 12 * 2) - 8px);
+      @media only screen and (min-width: 768px) {
+        &:last-of-type {
+          display: flex;
+          justify-content: flex-end;
+        }
+
+        &:nth-of-type(1) {}
+        &:nth-of-type(2) {
+          width: calc((100% / 12 * 4) - 8px);
+        }
+        &:nth-of-type(3) {
+          display: unset;
+          justify-content: unset;
+          width: calc((100% / 12 * 4) - 8px);
+        }
+        &:nth-of-type(4) {
+          width: calc((100% / 12 * 2) - 8px);
+        }
+        &:nth-of-type(5) {
+          width: calc((100% / 12 * 2) - 8px);
+        }
       }
     }
 

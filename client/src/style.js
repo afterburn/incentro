@@ -7,6 +7,7 @@ export default createGlobalStyle`
     --warnHover: #D32F2F;
     --cta: #8BC34A;
     --ctaHover: #689F38;
+    --carouselItemSize: 100px;
   }
 
   * {
