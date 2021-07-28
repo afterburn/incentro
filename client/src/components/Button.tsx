@@ -4,7 +4,8 @@ import styled, { css } from 'styled-components'
 interface IProps {
   children?: React.ReactNode,
   color?: string,
-  variant?: string
+  variant?: string,
+  small?: Boolean
 }
 
 type ColorOptions  = {
@@ -13,12 +14,14 @@ type ColorOptions  = {
 
 const colors: ColorOptions = {
   'warn': 'var(--warn)',
-  'cta': 'var(--cta)'
+  'cta': 'var(--cta)',
+  'transparent': 'var(--transparent)'
 }
 
 const hoverColors: ColorOptions = {
   'warn': 'var(--warnHover)',
-  'cta': 'var(--ctaHover)'
+  'cta': 'var(--ctaHover)',
+  'transparent': 'var(--transparentHover)'
 }
 
 const Button: React.FC = styled((props: IProps) => {
@@ -36,8 +39,9 @@ const Button: React.FC = styled((props: IProps) => {
   background-color: ${(props) => colors[props.color]};
   transition: background-color .2s ease-out,
     color .2s ease-out;
-  padding: 8px;
+  padding: 8px 12px;
   border: 1px solid transparent;
+  -webkit-tap-highlight-color:  rgba(255, 255, 255, 0); 
 
   &:hover {
     background-color: ${(props) => hoverColors[props.color]};

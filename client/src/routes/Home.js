@@ -7,6 +7,7 @@ import Input from '../components/Input'
 import Button from '../components/Button'
 import Carousel from '../components/Carousel'
 import List from '../components/List'
+import Modal from '../components/Modal'
 import Spinner from '../components/Spinner'
 
 import { SpotifyContext } from '../context/Spotify'
@@ -18,6 +19,10 @@ const Home = styled(({ className }) => {
   const inputRef = React.useRef()
   const [isRecording, setIsRecording] = React.useState(false)
 
+  const [modalActive, setModalActive] = React.useState(false)
+  const [modalError, setModalError] = React.useState(null)
+  const [modalTitle, setModalTitle] = React.useState('')
+
   const handleSearch = query => {
     spotifyContext.search(query)
     spotifyContext.setQuery(query)
@@ -26,9 +31,16 @@ const Home = styled(({ className }) => {
   const handleTTS = async () => {
     setIsRecording(true)
     
-    const query = await TTS.record()
-    spotifyContext.search(query)
-    inputRef.current.value = query
+    try {
+      const query = await TTS.record()
+      spotifyContext.search(query)
+      inputRef.current.value = query
+    } catch (ex) {
+      console.log(ex)
+      setModalTitle('Oops')
+      setModalError(ex.message)
+      setModalActive(true)
+    }
 
     setIsRecording(false)
   }
@@ -46,7 +58,7 @@ const Home = styled(({ className }) => {
         onChange={handleSearch}
         placeholder='Search for albums, artists or tracks...'
         defaultValue={spotifyContext.query}
-        debounce={250}
+        debounce={500}
       />
       <Button onClick={handleTTS} color='warn' disabled={isRecording}>
         <FaMicrophone />
@@ -78,6 +90,18 @@ const Home = styled(({ className }) => {
         <p>No result(s) found.</p>
       </div>
     }
+    <Modal active={modalActive} onClose={() => setModalActive(false)}>
+      <Modal.Header>
+        <Modal.Title>{modalTitle}</Modal.Title>
+        <Modal.Close />
+      </Modal.Header>
+      <Modal.Content>
+        {modalError}
+      </Modal.Content>
+      <Modal.Footer>
+        <Button color='cta' onClick={() => setModalActive(false)}>OK</Button>
+      </Modal.Footer>
+    </Modal>
   </div>
 })`
   display: flex;

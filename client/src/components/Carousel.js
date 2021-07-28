@@ -122,7 +122,9 @@ const Carousel = styled(({ className, title, type, data }) => {
   }, [itemsRef.current, listRef.current])
 
   return <div className={className} ref={listRef}>
-    <h2>{title}</h2>
+    <div className='header'>
+      <h2>{title} ({data.length})</h2>
+    </div>
     <div className='items' ref={itemsRef} draggable>
       {data.length > 0 && data.map((item, i) => 
         <CarouselItem
@@ -141,12 +143,19 @@ const Carousel = styled(({ className, title, type, data }) => {
   width: 100%;
   user-select: none;
   overflow: hidden;
+  margin-bottom: 20px;
   
-  h2 {
-    display: block;
-    padding: 8px;
-  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 8px;
 
+    h2 {
+      display: block;
+    }
+  }
+  
   .items {
     white-space: nowrap;
     width: 100%;

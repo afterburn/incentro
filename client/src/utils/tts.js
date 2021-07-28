@@ -14,10 +14,6 @@ class TextToSpeech {
       const colors = ['red', 'blue']
       const grammar = '#JSGF V1.0; grammar colors; public <color> = ' + colors.join(' | ') + ' ;'
       
-      const speechRecognitionList = new SpeechGrammarList()
-      speechRecognitionList.addFromString(grammar, 1)
-
-      recognition.grammars = speechRecognitionList
       recognition.continuous = false
       recognition.lang = 'en-US'
       recognition.interimResults = false
@@ -26,7 +22,9 @@ class TextToSpeech {
       recognition.onresult = e => {
         const result = e.results[0][0]
         const { transcript, confidence } = result
-        console.log(transcript, confidence)
+        if (confidence < .75) {
+          return reject(new Error(`We couldn't recognize what you were saying, please try again.`))
+        }
         resolve(transcript)
       }
 
@@ -35,10 +33,12 @@ class TextToSpeech {
       }
 
       recognition.onnomatch = (event) => {
-        reject('could not recognize what you were saying')
+        reject(new Error(`We couldn't recognize what you were saying, please try again.`))
       }
 
-      recognition.onerror = reject
+      recognition.onerror = (err) => {
+        reject(err)
+      }
       
       recognition.start()
     })
