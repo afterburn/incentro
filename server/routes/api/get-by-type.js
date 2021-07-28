@@ -13,9 +13,24 @@ module.exports = async (req, res, accessToken) => {
   // we send the cached item to the client and exit early.
   const cachedData = cache.get(cacheKey)
   if (cachedData && cachedData.hasOwnProperty(id)) {
-    return res.status(200).json({
-      payload: cachedData[id]
-    })
+    switch (dataType) {
+      case 'track': {
+        // When obtaining a track, the Spotify API does not include all artist data, so we check
+        // if we can load artist(s) from cache, otherwise we need to load them from the Spotify API
+        // N+1 problem.
+        const track = cachedData[id]
+        track.artists = await loadTrackArtists(track, accessToken)
+        return res.status(200).json({
+          payload: track
+        })
+        break
+      }
+      default: {
+        return res.status(200).json({
+          payload: cachedData[id]
+        })
+      }
+    }
   }
 
   // Otherwise, we use the Spotify API to obtain the data.
@@ -26,13 +41,7 @@ module.exports = async (req, res, accessToken) => {
       // When obtaining a track, the Spotify API does not include all artist data, so we check
       // if we can load artist(s) from cache, otherwise we need to load them from the Spotify API
       // N+1 problem.
-      data.artists = await Promise.all(data.artists.map(artist => {
-        const artists = cache.get('artists')
-        if (artists.hasOwnProperty(artist.id)) {
-          return new Promise(resolve => resolve(artists[artist.id]))
-        }
-        return spotifyAPI.getArtist(artist.id, accessToken)
-      }))
+      data.artists = await loadTrackArtists(data, accessToken)
       break
     }
   }
@@ -44,4 +53,14 @@ module.exports = async (req, res, accessToken) => {
   res.status(200).json({
     payload: data
   })
+}
+
+function loadTrackArtists (track, accessToken) {
+  return Promise.all(track.artists.map(artist => {
+    const artists = cache.get('artists')
+    if (artists.hasOwnProperty(artist.id)) {
+      return new Promise(resolve => resolve(artists[artist.id]))
+    }
+    return spotifyAPI.getArtist(artist.id, accessToken)
+  }))
 }
