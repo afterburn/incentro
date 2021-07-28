@@ -2,6 +2,8 @@ import React from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { FaSpotify } from 'react-icons/fa'
+
 import Spinner from '../components/Spinner'
 import Button from '../components/Button'
 import Carousel from '../components/Carousel'
@@ -9,7 +11,9 @@ import List from '../components/List'
 
 import { SpotifyContext } from '../context/Spotify'
 
+import capitalize from 'lodash/capitalize'
 import getImageUrl from '../utils/get-image-url'
+import isMobile from '../utils/is-mobile'
 
 const Detail = styled(({ className }) => {
   const params = useParams()
@@ -72,16 +76,20 @@ const Detail = styled(({ className }) => {
       <div className='cover-content'>
         <div className='cover-image' style={{ backgroundImage: `url(${coverImage})` }}></div>
         <div className='info'>
+          <h2>{capitalize(data.type)}</h2>
           <h1>{name}</h1>
-          <h2></h2>
         </div>
         <a href={externalUrl} target='_blank'>
-          <Button variant='outlined' color='cta'>Open on Spotify</Button>
+          <Button variant='outlined' color='cta'>
+            {isMobile ? <FaSpotify fill='var(--cta)' /> : <span>Open on Spotify</span>}
+          </Button>
         </a>
       </div>
     </div>
     <div className='content'>
-      <Button variant='outlined' onClick={goBack}>&larr; Go back</Button>
+      <div className='toolbar'>
+        <Button variant='outlined' onClick={goBack}>&larr; Go back</Button>
+      </div>
       {data.type === 'artist' &&
         <Carousel title='Albums' data={albums} />
       }
@@ -144,6 +152,10 @@ const Detail = styled(({ className }) => {
         margin-left: auto;
       }
     }
+  }
+
+  .toolbar {
+    padding: 8px;
   }
 `
 
