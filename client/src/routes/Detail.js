@@ -13,11 +13,12 @@ import { SpotifyContext } from '../context/Spotify'
 
 import capitalize from 'lodash/capitalize'
 import getImageUrl from '../utils/get-image-url'
-import isMobile from '../utils/is-mobile'
+import useIsMobile from '../utils/use-is-mobile'
 
 const Detail = styled(({ className }) => {
   const params = useParams()
   const history = useHistory()
+  const isMobile = useIsMobile()
   const spotifyContext = React.useContext(SpotifyContext)
   const { dataType, id } = useParams()
   
@@ -27,8 +28,6 @@ const Detail = styled(({ className }) => {
   const [track, setTrack] = React.useState(null)
   
   const loadData = async () => {
-    const result = await spotifyContext.getResult(dataType, id)
-
     switch(dataType) {
       case 'artist': {
         const res = await spotifyContext.getAlbums(id)
@@ -41,16 +40,15 @@ const Detail = styled(({ className }) => {
         break
       }
       case 'track': {
-        const res = await spotifyContext.getTrack(result.album.id, id)
+        const res = await spotifyContext.getTrack(id)
         setTrack(res)
         break
       }
     }
     
+    const result = await spotifyContext.getResult(dataType, id)
     setData(result)
   }
-
-  const goBack = () => history.goBack()
 
   React.useEffect(() => {
     loadData()
@@ -88,7 +86,7 @@ const Detail = styled(({ className }) => {
     </div>
     <div className='content'>
       <div className='toolbar'>
-        <Button variant='outlined' onClick={goBack}>&larr; Go back</Button>
+        <Button variant='outlined' onClick={history.goBack}>&larr; Go back</Button>
       </div>
       {data.type === 'artist' &&
         <Carousel title='Albums' data={albums} />
@@ -137,6 +135,7 @@ const Detail = styled(({ className }) => {
 
       .cover-image {
         width: 100px;
+        min-width: 100px;
         height: 100px;
         background-size: cover;
         background-position: center;
@@ -144,8 +143,17 @@ const Detail = styled(({ className }) => {
         margin-right: 20px;
       }
 
-      h1 {
-        font-size: 2rem;
+      .info {
+        overflow: hidden;
+        white-space: nowrap;
+        margin-right: 20px;
+        
+        h1 {
+          font-size: 2rem;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 100%;
+        }
       }
 
       a {

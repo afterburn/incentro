@@ -6,6 +6,15 @@ npm i
 ```
 
 ## Usage
+To run this project you will need a Spotify API client_id and client_secret obtainable through [Spotify For Developers](https://developer.spotify.com/documentation/general/guides/app-settings/#register-your-app).
+Then, in the root of the project, you will need to create a config.json file that looks like this:
+```json
+{
+  "client_id": "<your-client-id>",
+  "client_secret": "<your-client-secret>"
+}
+```
+
 ```
 npm start // Will run webpack in watch mode and start the node server. (Please wait until webpack build is finished before attempting to visit url)
 npm run test // Will run jest test suites.

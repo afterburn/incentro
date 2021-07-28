@@ -143,7 +143,7 @@ const Carousel = styled(({ className, title, type, data }) => {
   width: 100%;
   user-select: none;
   overflow: hidden;
-  margin-bottom: 20px;
+  margin: 12px 0;
   
   .header {
     display: flex;

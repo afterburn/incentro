@@ -5,9 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "build": "webpack -w",
+    "build": "webpack",
+    "build-hot": "webpack -w",
     "serve": "node server",
-    "start": "concurrently \"npm run build\" \"npm run serve\""
+    "serve-hot": "nodemon server",
+    "start": "concurrently \"npm run build\" \"npm run serve\"",
+    "dev": "concurrently \"npm run build-hot\" \"npm run serve-hot\""
   },
   "repository": {
     "type": "git",
