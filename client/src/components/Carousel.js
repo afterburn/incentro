@@ -18,7 +18,7 @@ const getXY = (e) => {
   }
 }
 
-const Carousel = styled(({ className, title, type, data }) => {
+const Carousel = styled(({ className, title, data }) => {
   const listRef = React.useRef()
   const itemsRef = React.useRef()
 

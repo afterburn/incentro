@@ -1,5 +1,6 @@
 import React from "react"
 
+// Hook for determining whether or not we are on mobile.
 export default () => {
   const [width, setWidth] = React.useState(window.innerWidth)
 

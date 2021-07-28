@@ -11,14 +11,13 @@ class TextToSpeech {
     return new Promise((resolve, reject) => {
       const { recognition } = this
 
-      const colors = ['red', 'blue']
-      const grammar = '#JSGF V1.0; grammar colors; public <color> = ' + colors.join(' | ') + ' ;'
-      
+      // Initialize speech recognition.      
       recognition.continuous = false
       recognition.lang = 'en-US'
       recognition.interimResults = false
       recognition.maxAlternatives = 1
 
+      // Bind web speech api events.
       recognition.onresult = e => {
         const result = e.results[0][0]
         const { transcript, confidence } = result
@@ -40,6 +39,7 @@ class TextToSpeech {
         reject(err)
       }
       
+      // Start speech recognition.
       recognition.start()
     })
   }

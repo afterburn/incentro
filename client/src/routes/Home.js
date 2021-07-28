@@ -28,9 +28,9 @@ const Home = styled(({ className }) => {
     spotifyContext.setQuery(query)
   }
 
+  // Function that will record speech and execute search with the transcript.
   const handleTTS = async () => {
     setIsRecording(true)
-    
     try {
       const query = await TTS.record()
       spotifyContext.search(query)
@@ -41,7 +41,6 @@ const Home = styled(({ className }) => {
       setModalError(ex.message)
       setModalActive(true)
     }
-
     setIsRecording(false)
   }
 

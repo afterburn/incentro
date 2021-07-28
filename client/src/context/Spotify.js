@@ -88,7 +88,7 @@ export const Provider = ({ children }) => {
 
   const getTrack = (trackId) => {
     return new Promise((resolve, reject) => {
-      get(`/api/tracks/${trackId}`)
+      get(`/api/track/${trackId}`)
         .then(resolve)
         .catch(console.log)
     })

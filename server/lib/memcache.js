@@ -1,3 +1,4 @@
+// Very simple in-memory 'cache' storage.
 class Memcache {
   constructor () {
     this.data = {}

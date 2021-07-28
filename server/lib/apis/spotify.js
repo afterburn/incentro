@@ -3,7 +3,10 @@ const { get, post } = require('../utils/fetch')
 
 module.exports.getAccessToken = (clientId, clientSecret) => {
   return new Promise((resolve, reject) => {
+    // Convert clientId & clientSecret to base64 string as per the Spotify API spec.
     const authString = Buffer.from(`${clientId}:${clientSecret}`).toString('base64')
+
+    // Retrieve access token.
     post('https://accounts.spotify.com/api/token', {
       headers: {
         'Authorization': `Basic ${authString}`,
@@ -34,18 +37,6 @@ module.exports.search = (query, token) => {
 module.exports.getByType = (dataType, id, token) => {
   return new Promise((resolve, reject) => {
     get(`https://api.spotify.com/v1/${dataType}s/${id}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    })
-      .then(resolve)
-      .catch(reject)
-  })
-}
-
-module.exports.getTrack = (id, token) => {
-  return new Promise((resolve, reject) => {
-    get(`https://api.spotify.com/v1/tracks/${id}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
