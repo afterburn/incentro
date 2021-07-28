@@ -14,6 +14,7 @@ Then, in the root of the project, you will need to create a config.json file tha
   "client_secret": "<your-client-secret>"
 }
 ```
+After that you can run the following scripts:
 
 ```
 npm start // Will run webpack in watch mode and start the node server. (Please wait until webpack build is finished before attempting to visit url)
