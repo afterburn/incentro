@@ -28,3 +28,4 @@ npm run test // Will run jest test suites.
 4. Implement Redis for caching instead of using an in-memory solution.
 5. Implement pagination, right now, the app will only show the first 20 items.
 6. Split up some of the components into seperate files (Carousel & List for example).
+7. Seperate some of the 'business logic' away from the UI code.
