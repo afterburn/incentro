@@ -2,7 +2,6 @@ const path = require('path')
 const express = require('express')
 const spotifyAPI = require('./lib/apis/spotify')
 const memcache = require('./lib/memcache')
-
 const config = require('../config.json')
 
 const dist = path.join(__dirname, '..', 'client', 'dist')
@@ -45,6 +44,32 @@ async function start () {
           artists: result.artists.items,
           tracks: result.tracks.items
         }
+      })
+    })
+
+    app.get('/api/albums/:artistId', async (req, res) => {
+      const { artistId } = req.params
+      const albums = await spotifyAPI.getArtistAlbums(artistId, accessToken)
+      res.status(200).json({
+        payload: albums.items
+      })
+    })
+
+    app.get('/api/tracks/:albumId/all', async (req, res) => {
+      const { albumId } = req.params
+      const album = await spotifyAPI.getAlbumTracks(albumId, accessToken)
+      res.status(200).json({
+        payload: album.tracks.items.map(item => ({ ...item, album }))
+      })
+    })
+
+    app.get('/api/tracks/:albumId/:trackId', async (req, res) => {
+      const { albumId, trackId } = req.params
+      const track = await spotifyAPI.getTrack(trackId, accessToken)
+      track.artists = await Promise.all(track.artists.map(artist => spotifyAPI.getArtist(artist.id, accessToken)))
+      
+      res.status(200).json({
+        payload: track
       })
     })
 

@@ -70,6 +70,30 @@ export const Provider = ({ children }) => {
     })
   }
 
+  const getAlbums = (artistId) => {
+    return new Promise((resolve, reject) => {
+      get(`/api/albums/${artistId}`)
+        .then(resolve)
+        .catch(console.log)
+    })
+  }
+
+  const getTracks = (albumId) => {
+    return new Promise((resolve, reject) => {
+      get(`/api/tracks/${albumId}/all`)
+        .then(resolve)
+        .catch(console.log)
+    })
+  }
+
+  const getTrack = (albumId, trackId) => {
+    return new Promise((resolve, reject) => {
+      get(`/api/tracks/${albumId}/${trackId}`)
+        .then(resolve)
+        .catch(console.log)
+    })
+  }
+
   const context = {
     setAlbums,
     setArtists,
@@ -79,7 +103,10 @@ export const Provider = ({ children }) => {
     search,
     isSearching,
     query,
-    setQuery
+    setQuery,
+    getAlbums,
+    getTracks,
+    getTrack
   }
 
   return <SpotifyContext.Provider value={context}>

@@ -1,28 +1,56 @@
 import React from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import Spinner from '../components/Spinner'
 import Button from '../components/Button'
+import Carousel from '../components/Carousel'
+import List from '../components/List'
 
 import { SpotifyContext } from '../context/Spotify'
 
 import getImageUrl from '../utils/get-image-url'
 
 const Detail = styled(({ className }) => {
+  const params = useParams()
+  const history = useHistory()
   const spotifyContext = React.useContext(SpotifyContext)
   const { dataType, id } = useParams()
   
   const [data, setData] = React.useState(null)
+  const [albums, setAlbums] = React.useState([])
+  const [tracks, setTracks] = React.useState([])
+  const [track, setTrack] = React.useState(null)
   
   const loadData = async () => {
     const result = await spotifyContext.getResult(dataType, id)
+
+    switch(dataType) {
+      case 'artist': {
+        const res = await spotifyContext.getAlbums(id)
+        setAlbums(res)
+        break
+      }
+      case 'album': {
+        const res = await spotifyContext.getTracks(id)
+        setTracks(res)
+        break
+      }
+      case 'track': {
+        const res = await spotifyContext.getTrack(result.album.id, id)
+        setTrack(res)
+        break
+      }
+    }
+    
     setData(result)
   }
 
+  const goBack = () => history.goBack()
+
   React.useEffect(() => {
     loadData()
-  }, [])
+  }, [params.dataType, params.id])
 
   if (!data) {
     return <div className={className}>
@@ -37,9 +65,7 @@ const Detail = styled(({ className }) => {
   const coverImage = data.type === 'album' || data.type === 'artist'
     ? getImageUrl(data.images)
     : getImageUrl(data.album.images)
-    
-  console.log(data)
-  
+
   return <div className={className}>
     <div className='cover'>
       <div className='cover-background' />
@@ -55,9 +81,19 @@ const Detail = styled(({ className }) => {
       </div>
     </div>
     <div className='content'>
-      <Link to='/'>
-        <Button variant='outlined'>&larr; Go back</Button>
-      </Link>
+      <Button variant='outlined' onClick={goBack}>&larr; Go back</Button>
+      {data.type === 'artist' &&
+        <Carousel title='Albums' data={albums} />
+      }
+      {data.type === 'album' &&
+        <List title='Tracks' data={tracks} />
+      }
+      {track && data.type === 'track' &&
+        <>
+          <Carousel title='Album' data={[track.album]} />
+          <Carousel title='Artists' data={track.artists} />
+        </>
+      }
     </div>
   </div>
 })`
@@ -108,10 +144,6 @@ const Detail = styled(({ className }) => {
         margin-left: auto;
       }
     }
-  }
-
-  .content {
-    padding: 20px;
   }
 `
 
